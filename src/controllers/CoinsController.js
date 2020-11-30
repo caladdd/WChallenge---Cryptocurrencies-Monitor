@@ -7,13 +7,13 @@ const HttpCode = require('../helpers/HttpCodes');
 const constants = require('../helpers/constants');
 
 class CoinsController {
-    /**
-     * Return a list of coins from coingecko
-     * @param limit maximum number of coins returned in the list
-     * @param page number of page
-     * @param favoriteCoin favorite coin of the user that is login
-     * @returns {Promise<ResponseOperation>}
-     */
+  /**
+   * Return a list of coins from coingecko
+   * @param limit maximum number of coins returned in the list
+   * @param page number of page
+   * @param favoriteCoin favorite coin of the user that is login
+   * @returns {Promise<ResponseOperation>}
+   */
   async listCoins(limit, page, favoriteCoin) {
     const requestCoinList = {
       method: 'GET',
@@ -59,12 +59,12 @@ class CoinsController {
       });
   }
 
-    /**
-     * Add a coin into a list for an user
-     * @param userId id of the user
-     * @param coinId coin id, this id is took from the coin list
-     * @returns {Promise<T>}
-     */
+  /**
+   * Add a coin into a list for an user
+   * @param userId id of the user
+   * @param coinId coin id, this id is took from the coin list
+   * @returns {Promise<T>}
+   */
   async addCoin(userId, coinId) {
     const requestCoinList = {
       method: 'GET',
@@ -97,11 +97,11 @@ class CoinsController {
       });
   }
 
-    /**
-     * Return a list with the top coins of an user
-     * @param userId
-     * @returns {Promise<undefined|T>}
-     */
+  /**
+   * Return a list with the top coins of an user
+   * @param userId
+   * @returns {Promise<undefined|T>}
+   */
   async topCoins(userId) {
     let fCoin;
     return User.find({ _id: userId })
@@ -138,6 +138,7 @@ class CoinsController {
       })
       .then((myTopCoins) => {
         myTopCoins.sort((a, b) => a[fCoin] - b[fCoin]);
+        if (myTopCoins.length >= 25) myTopCoins = myTopCoins.slice(0, 25);
         return Promise.resolve(
           new ResponseOperation(true, HttpCode.OK, myTopCoins)
         );
